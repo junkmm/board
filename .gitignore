@@ -10,12 +10,6 @@ build/
 *.iws
 *.ipr
 
-# 테스트 코드
-src/test/
-
-# GitHub Actions 워크플로우
-.github/
-
 # 임시 파일 및 macOS 파일
 *.swp
 *.swo

@@ -10,4 +10,27 @@ build/
 .vscode
 *.swp
 *.swo
+.DS_Store
+
+# 테스트 코드 제외
+src/test/
+
+# GitHub Actions 워크플로우 제외
+.github/
+
+# gradle 캐시 및 빌드 산출물 제외
+.gradle/
+build/
+!build/libs/*.jar
+
+# IDE 및 에디터 설정 제외
+.idea/
+.vscode/
+*.iml
+*.iws
+*.ipr
+
+# 임시 파일 및 macOS 파일
+*.swp
+*.swo
 .DS_Store 

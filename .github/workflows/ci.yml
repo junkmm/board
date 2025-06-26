@@ -60,3 +60,21 @@ jobs:
           tags: ${{ steps.login-ecr.outputs.registry }}/${{ env.ECR_REPOSITORY }}:${{ github.sha }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
+
+      - name: Generate imagedefinitions.json for ECS
+        run: |
+          mkdir -p deploy
+          IMAGE_URI="${{ steps.login-ecr.outputs.registry }}/${{ env.ECR_REPOSITORY }}:${{ github.sha }}"
+          printf '[{"name":"board-app","imageUri":"%s"}]' "$IMAGE_URI" > deploy/imagedefinitions.json
+
+      - name: Push imagedefinitions.json to board-gitops repo
+        run: |
+          GITOPS_REPO="https://x-access-token:${{ secrets.GITOPS_TOKEN }}@github.com/junkmm/board-gitops.git"
+          git clone "$GITOPS_REPO" gitops-tmp
+          cp deploy/imagedefinitions.json gitops-tmp/imagedefinitions.json
+          cd gitops-tmp
+          git config user.email "actions@github.com"
+          git config user.name "GitHub Actions"
+          git add imagedefinitions.json
+          git commit -m "Update imagedefinitions.json for ${{ github.sha }}" || echo "No changes to commit"
+          git push origin main
